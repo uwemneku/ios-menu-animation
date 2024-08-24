@@ -21,7 +21,6 @@ const icons = [
   "logos:airbnb-icon",
   "logos:blender",
   "logos:discord-icon",
-  "logos:discord-icon",
   "logos:facebook",
   "logos:github-octocat",
   "logos:google-gemini",
@@ -38,9 +37,6 @@ const icons = [
   "logos:webpack",
 ];
 
-const getRandomIcon = () =>
-  icons[Math.floor(Math.random() * (icons.length - 1))];
-
 const getIcon = (start: number, count: number) => {
   const res: {
     id: string;
@@ -54,40 +50,34 @@ const getIcon = (start: number, count: number) => {
     res.push({
       id: nanoid(),
       icon,
-      name: generateName(),
+      name: generateName(5),
     });
   }
   return res;
 };
 
-console.log(getIcon);
-
-const generateIcons = (count: number) =>
-  new Array(count).fill("").map(() => ({
-    id: nanoid(),
-    icon: getRandomIcon(),
-    name: generateName(),
-  }));
-
 const getRandomStartCount = () =>
   Math.floor(Math.random() * (icons.length - 1));
 export const cardsData = new Array(10).fill("").map(() => {
   const id = nanoid();
-  const smallIcons = getIcon(getRandomStartCount(), 4);
-  const smallIconIds = smallIcons.map((i) => i.id);
+  const icons = getIcon(
+    getRandomStartCount(),
+    12 + Math.round(Math.random() * 5)
+  );
+  const largeIcons = icons.slice(0, 3);
+  const modalIcons = icons.slice(4);
+
   return {
     id,
-    label: generateName(14),
-    largeIcons: generateIcons(3),
-    modalIcons: shuffleArray(
-      getIcon(getRandomStartCount(), Math.round(Math.random() * 15))
-        .concat(smallIcons)
-        .map((i) => ({ ...i, isSmall: smallIconIds.includes(i.id) }))
-    ),
+    label: generateName(8),
+    largeIcons,
+    modalIcons: modalIcons.concat(modalIcons.slice(0, 4)),
+    shuffledModalIcons: shuffleArray(modalIcons),
   };
 });
 
-function shuffleArray<T>(array: T[]): T[] {
+function shuffleArray<T>(arr: T[]): T[] {
+  const array = [...arr];
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [array[i], array[j]] = [array[j], array[i]];
