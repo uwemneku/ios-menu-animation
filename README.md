@@ -6,4 +6,7 @@ A simple attempt to recreate ios menu animation
 ### Set up
 
 ```sh
+ git clone https://github.com/uwemneku/ios-menu-animation.git
+ pnpm i
+ pnpm dev
 ```
